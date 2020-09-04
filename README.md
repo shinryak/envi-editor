@@ -1,19 +1,9 @@
-CKEditor 5 classic editor build
+CKEditor 5 custom build for NUXT
 ========================================
 
-<h3 align=center>⚠⚠ This repository was moved ⚠⚠</h3>
-
-<p align=center>The package was moved to the <a href="https://github.com/ckeditor/ckeditor5/tree/master/packages">main repository</a>.</p>
-
-[![npm version](https://badge.fury.io/js/%40ckeditor%2Fckeditor5-build-classic.svg)](https://www.npmjs.com/package/@ckeditor/ckeditor5-build-classic)
-[![Dependency Status](https://david-dm.org/ckeditor/ckeditor5-build-classic/status.svg)](https://david-dm.org/ckeditor/ckeditor5-build-classic)
-[![devDependency Status](https://david-dm.org/ckeditor/ckeditor5-build-classic/dev-status.svg)](https://david-dm.org/ckeditor/ckeditor5-build-classic?type=dev)
-
-The classic editor build for CKEditor 5. Read more about the [classic editor build](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/overview.html#classic-editor) and see the [demo](https://ckeditor.com/docs/ckeditor5/latest/examples/builds/classic-editor.html).
-
-![CKEditor 5 classic editor build screenshot](https://c.cksource.com/a/1/img/npm/ckeditor5-build-classic.png)
-
 ## Documentation
+
+Added a custom image plugin that you can access component
 
 See:
 
@@ -27,47 +17,118 @@ See:
 First, install the build from npm:
 
 ```bash
-npm install --save @ckeditor/ckeditor5-build-classic
+npm install --save @shinryak/envi-editor
 ```
 
 And use it in your website:
 
 ```html
-<div id="editor">
-	<p>This is the editor content.</p>
-</div>
-<script src="./node_modules/@ckeditor/ckeditor5-build-classic/build/ckeditor.js"></script>
+<template>
+  <div>
+    <ckeditor v-model="editorData" :editor="editor" :config="editorConfig" @input="handleInputEvent" />
+    <b-modal ref="selectImage" hide-footer @hidden="imageSelected=true">
+      <template v-slot:modal-title>
+        Select
+      </template>
+      <div class="d-block text-center">
+        <b-form-input
+          id="name-input"
+          v-model="imageUrl"
+          required
+        />
+      </div>
+      <b-button class="mt-3" variant="primary" @click="$refs['selectImage'].hide()">
+        Finish
+      </b-button>
+    </b-modal>
+  </div>
+</template>
+
 <script>
-	ClassicEditor
-		.create( document.querySelector( '#editor' ) )
-		.then( editor => {
-			window.editor = editor;
-		} )
-		.catch( error => {
-			console.error( 'There was a problem initializing the editor.', error );
-		} );
+let ClassicEditor, CKEditor
+// this use for nuxt ssr, remove the conditional if using spa mode
+if (process.client) {
+  ClassicEditor = require('@shinryak/envi-editor')
+  CKEditor = require('@ckeditor/ckeditor5-vue')
+} else {
+  CKEditor = { component: { template: '<div></div>' } }
+}
+
+export default {
+  components: {
+    ckeditor: CKEditor.component
+  },
+  props: {
+    value: {
+      type: String,
+      default: ''
+    }
+  },
+  data () {
+    return {
+      imageUrl: '',
+      imageSelected: false,
+      editor: ClassicEditor,
+      editorData: this.value,
+      editorConfig: {
+        toolbar: {
+          items: [
+            'heading',
+            '|',
+            'bold',
+            'italic',
+            'link',
+            'bulletedList',
+            'numberedList',
+            '|',
+            'indent',
+            'outdent',
+            '|',
+            'customImage',
+            'blockQuote',
+            'insertTable',
+            'mediaEmbed',
+            'undo',
+            'redo'
+          ]
+        },
+        customImage: {
+          chooseImage: async () => {
+            this.imageUrl = ''
+            this.imageSelected = false
+            // eslint-disable-next-line dot-notation
+            this.$refs['selectImage'].show()
+            const selectedImageSrc = new Promise((resolve) => {
+              const watcher = this.$watch('imageSelected', (newVal) => {
+                resolve(this.imageUrl)
+                window.console.log(this.imageUrl)
+                watcher() // stop watch;
+              })
+            })
+            return await selectedImageSrc
+          }
+        },
+        image: {
+          toolbar: ['imageTextAlternative', '|', 'imageStyle:alignLeft', 'imageStyle:full', 'imageStyle:alignRight', 'imageStyle:alignCenter', 'imageStyle:side'],
+          styles: [
+            'full',
+            'side',
+            'alignLeft',
+            'alignRight',
+            'alignCenter'
+          ]
+        }
+        // ...
+      }
+    }
+  },
+  methods: {
+    handleInputEvent () {
+      this.$emit('input', this.editorData)
+    }
+  }
+}
 </script>
-```
-
-Or in your JavaScript application:
-
-```js
-import ClassicEditor from '@ckeditor/ckeditor5-build-classic';
-
-// Or using the CommonJS version:
-// const ClassicEditor = require( '@ckeditor/ckeditor5-build-classic' );
-
-ClassicEditor
-	.create( document.querySelector( '#editor' ) )
-	.then( editor => {
-		window.editor = editor;
-	} )
-	.catch( error => {
-		console.error( 'There was a problem initializing the editor.', error );
-	} );
-```
-
-**Note:** If you are planning to integrate CKEditor 5 deep into your application, it is actually more convenient and recommended to install and import the source modules directly (like it happens in `ckeditor.js`). Read more in the [Advanced setup guide](https://ckeditor.com/docs/ckeditor5/latest/builds/guides/integration/advanced-setup.html).
 
 ## License
 
