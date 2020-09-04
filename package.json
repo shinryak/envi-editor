@@ -1,7 +1,7 @@
 {
   "name": "@shinryak/envi-editor",
-  "version": "1.1.0",
-  "description": "The classic editor build of CKEditor 5 – the best browser-based rich text editor.",
+  "version": "1.1.1",
+  "description": "The custom build of CKEditor 5 for NUXT.",
   "keywords": [
     "ckeditor5-build",
     "ckeditor",
@@ -18,7 +18,12 @@
     "collaboration",
     "collaborative",
     "real-time",
-    "framework"
+    "framework",
+    "nuxt", 
+    "nuxtjs",
+    "nuxt js",
+    "nuxt.js",
+    "ckeditor custom"
   ],
   "main": "./build/ckeditor.js",
   "files": [
@@ -64,15 +69,15 @@
     "node": ">=8.0.0",
     "npm": ">=5.7.1"
   },
-  "author": "CKSource (http://cksource.com/)",
+  "author": "Shinryak",
   "license": "GPL-2.0-or-later",
-  "homepage": "https://ckeditor.com/ckeditor-5",
+  "homepage": "https://github.com/shinryak/envi-editor#readme",
   "bugs": {
-    "url": "https://github.com/ckeditor/ckeditor5/issues"
+    "url": "https://github.com/shinryak/envi-editor/issues"
   },
   "repository": {
     "type": "git",
-    "url": "git+https://github.com/ckeditor/ckeditor5-build-classic.git"
+    "url": "git+https://github.com/shinryak/envi-editor.git"
   },
   "scripts": {
     "build": "webpack --mode production",
