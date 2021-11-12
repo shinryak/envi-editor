@@ -1,7 +1,8 @@
 {
-  "editor.tabSize": 2,
-  "editor.codeActionsOnSave": {
+	"editor.tabSize": 2,
+	"editor.codeActionsOnSave": {
     "source.fixAll.eslint": true
   },
-  "vetur.validation.template": false
+  "eslint.validate": ["javascript"],
+	"vetur.validation.template": false
 }

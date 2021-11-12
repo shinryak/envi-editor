@@ -23,10 +23,9 @@ export default class CustomImage extends Plugin {
 			view.on( 'execute', async () => {
 				let imageUrl = '';
 				const handle = config.chooseImage();
-				if ( typeof ( handle ) == 'string' ) {
+				if ( typeof handle == 'string' ) {
 					imageUrl = handle;
-				}
-				else if ( isPromise( handle ) ) {
+				} else if ( isPromise( handle ) ) {
 					imageUrl = await handle;
 				}
 				editor.model.change( writer => {
@@ -36,7 +35,10 @@ export default class CustomImage extends Plugin {
 						} );
 
 						// Insert the image in the current selection location.
-						editor.model.insertContent( imageElement, editor.model.document.selection );
+						editor.model.insertContent(
+							imageElement,
+							editor.model.document.selection
+						);
 					}
 				} );
 			} );

@@ -6,6 +6,8 @@
 // The editor creator to use.
 import ClassicEditorBase from '@ckeditor/ckeditor5-editor-classic/src/classiceditor';
 
+import Font from '@ckeditor/ckeditor5-font/src/font';
+import Alignment from '@ckeditor/ckeditor5-alignment/src/alignment';
 import Essentials from '@ckeditor/ckeditor5-essentials/src/essentials';
 import UploadAdapter from '@ckeditor/ckeditor5-adapter-ckfinder/src/uploadadapter';
 import Autoformat from '@ckeditor/ckeditor5-autoformat/src/autoformat';
@@ -39,6 +41,8 @@ export default class ClassicEditor extends ClassicEditorBase {}
 // Plugins to include in the build.
 ClassicEditor.builtinPlugins = [
 	CustomImage,
+	Alignment,
+	Font,
 	Essentials,
 	UploadAdapter,
 	Autoformat,
@@ -73,6 +77,12 @@ ClassicEditor.defaultConfig = {
 			'customImage',
 			'|',
 			'heading',
+			'alignment',
+			'|',
+			'fontSize',
+			// "fontFamily",
+			'fontColor',
+			'fontBackgroundColor',
 			'|',
 			'bold',
 			'italic',
@@ -104,17 +114,13 @@ ClassicEditor.defaultConfig = {
 		]
 	},
 	customImage: {
-		async chooseImage( ) {
+		async chooseImage() {
 			// eslint-disable-next-line no-undef, no-alert
 			return prompt( 'Paste image URL here' );
 		}
 	},
 	table: {
-		contentToolbar: [
-			'tableColumn',
-			'tableRow',
-			'mergeTableCells'
-		]
+		contentToolbar: [ 'tableColumn', 'tableRow', 'mergeTableCells' ]
 	},
 	// This value must be kept in sync with the language defined in webpack.config.js.
 	language: 'en'
